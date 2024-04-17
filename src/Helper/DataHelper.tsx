@@ -1,5 +1,4 @@
 import mapboxgl from 'mapbox-gl';
-import React from 'react';
 
 export async function fetchData<T>(url: string): Promise<T> {
   try {
@@ -13,7 +12,16 @@ export async function fetchData<T>(url: string): Promise<T> {
     throw error;
   }
 }
+export function initializeMap(container: string) {
+  return new mapboxgl.Map({
+    container: container,
+    style: "mapbox://styles/mapbox/streets-v11",
+    center: [-122.40945776860957, 37.7653468958055],
+    zoom: 12,
+    hash: false
 
+  });
+}
 export function addDataToMap(map: mapboxgl.Map, features: any[]): void {
  
   map.addSource("food-truck-source", {
@@ -40,36 +48,26 @@ export function addDataToMap(map: mapboxgl.Map, features: any[]): void {
       });
     });
     
-    map.on("click", "food-truck-points", function (e) {
-      if (!e.features || e.features.length === 0) {
-        return;
-      }
-    
-      const feature = e.features[0];
-      if (feature.geometry.type !== "Point" || !feature.properties) {
-        return;
-      }
-    
-      map.on('click', 'food-truck-points', function () {
-        const coordinates: [number, number] = features[0].geometry.coordinates as [number, number];
-        const name: string = features[0].properties.applicant;
-        const foodItems: string = features[0].properties.fooditems;
-        const facilityType: string = features[0].properties.facilitytype;
-        const Address: string = features[0].properties.address;
-        const locationDescription: string = features[0].properties.locationdescription;
-        const Status: string = features[0].properties.status;
-        const Dayshours: string = features[0].properties.dayshours;
-        const Expirationdate: string = features[0].properties.expirationdate;
-        const Approved: string = features[0].properties.approved;
   
-        new mapboxgl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(`<h3>${name}</h3><p><b>Facility Type: </b>${facilityType}</p><p><b>Address: </b>${Address}</p><p><b>Food Items: </b>${foodItems}</p><p><b>Location Description: </b>${locationDescription}</p><p><b>Status: </b><i>${Status}</i></p><p><b>Days hours: </b>${Dayshours}</p><p><b>Approved: </b>${Approved}</p><p><b>Expiration date: </b>${Expirationdate}</p>`)
-        .addTo(map);
+    map.on('click', 'food-truck-points', function (e:any) {
+      const coordinates: [number, number] = e.features[0].geometry.coordinates as [number, number];
+      const name: string = e.features[0].properties.applicant;
+      const foodItems: string = e.features[0].properties.fooditems;
+      const facilityType: string = e.features[0].properties.facilitytype;
+      const Address: string = e.features[0].properties.address;
+      const locationDescription: string = e.features[0].properties.locationdescription;
+      const Status: string = e.features[0].properties.status;
+      const Dayshours: string = e.features[0].properties.dayshours;
+      const Expirationdate: string = e.features[0].properties.expirationdate;
+      const Approved: string = e.features[0].properties.approved;
+    
+          new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(`<h3>${name}</h3><p><b>Facility Type: </b>${facilityType}</p><p><b>Address: </b>${Address}</p><p><b>Food Items: </b>${foodItems}</p><p><b>Location Description: </b>${locationDescription}</p><p><b>Status: </b><i>${Status}</i></p><p><b>Days hours: </b>${Dayshours}</p><p><b>Approved: </b>${Approved}</p><p><b>Expiration date: </b>${Expirationdate}</p>`)
+          .addTo(map);
+        
       
-      });
-     
-  
+       
     });
     
   }  
