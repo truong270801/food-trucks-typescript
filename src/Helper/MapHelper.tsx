@@ -1,15 +1,8 @@
 import mapboxgl from "mapbox-gl";
 
-export function initializeMap(container: string): mapboxgl.Map {
-  return new mapboxgl.Map({
-    container: container,
-    style: "mapbox://styles/mapbox/streets-v11",
-    center: [-122.40945776860957, 37.7653468958055],
-    zoom: 12,
-  });
-}
 
-export function loadLocationIcon(map: mapboxgl.Map): void {
+
+export function loadLocationIcon(map: mapboxgl.Map) {
   map.loadImage(require("../assets/image/mylocation.png"), (error: any, image: any) => {
     if (error) throw error;
     map.addImage("location-icon", image);
@@ -45,20 +38,3 @@ export function loadLocationIcon(map: mapboxgl.Map): void {
   });
 }
 
-// export function loadTruckLocations(map: mapboxgl.Map): void {
-//   map.loadImage(require("../assets/image/location.png"), (error: any, image: any) => {
-//     if (error) throw error;
-//     map.addImage("truck-icon", image);
-//     map.addLayer({
-//       id: "truck-locations",
-//       type: "symbol",
-//       source: "truck-locations",
-//       layout: {
-//         "icon-image": "truck-icon",
-//         "icon-size": 0.7,
-//         "icon-allow-overlap": true,
-//         "icon-ignore-placement": true,
-//       },
-//     });
-//   });
-// }

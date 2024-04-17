@@ -1,8 +1,8 @@
 import './App.css';
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import { initializeMap, loadLocationIcon } from "./Helper/MapHelper";
-import { fetchData, createFeatures, addDataToMap } from "./Helper/DataHelper";
+import { loadLocationIcon } from "./Helper/MapHelper";
+import { fetchData,initializeMap,  createFeatures, addDataToMap } from "./Helper/DataHelper";
 import { closePanel, openPanel } from "./Helper/PanelHelper";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -22,7 +22,7 @@ function App() {
     fetchData(process.env.REACT_APP_API_URL || "")
       .then((jsonData: any) => {
         const filteredFeatures = createFeatures(jsonData, radius);
-        addDataToMap(map, filteredFeatures);
+        addDataToMap(map,  filteredFeatures);
       })
       .catch((error: Error) => {
         console.error("Error fetching data:", error);
