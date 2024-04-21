@@ -50,13 +50,14 @@ function App() {
           <b>
             DISTANCE:
             <input
-              type="number"
-              id="radius"
-              min="0"
-              step="0.1"
-              value={radius}
-              onChange={(e) => setRadius(parseFloat(e.target.value))}
-            />
+  type="number"
+  id="radius"
+  min="0"
+  step="0.1"
+  value={radius || ''} 
+  onChange={(e) => setRadius(parseFloat(e.target.value))}
+/>
+
             Km
           </b>
         </div>
