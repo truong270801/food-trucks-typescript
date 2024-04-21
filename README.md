@@ -25,7 +25,6 @@ npm install --save-dev @fortawesome/fontawesome-free
 * Nhập khoảng cách bán kính từ địa điểm cố định trên bản đồ in ra các xe tải trong phạm vi bán kính đó
 * Cick vào địa điểm hiển thị các thông tin xe tải đó
 ## TRẠNG THÁI
-**Đang hoàn thiện**
-### Lỗi 
-=> Hiển thị Popup sai vị trí (xuất hiện trong 1 page mới khác).
+**Hoàn thiện**
+
 
