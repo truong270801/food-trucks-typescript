@@ -6,6 +6,8 @@ interface DistanceInputProps {
 }
 
 function DistanceInputComponent({ radius, setRadius }: DistanceInputProps) {
+  
+
   return (
     <div className="content">
       <b>
@@ -19,7 +21,9 @@ function DistanceInputComponent({ radius, setRadius }: DistanceInputProps) {
           onChange={(e) => setRadius(parseFloat(e.target.value))}
         />
         Km
-      </b>
+      </b> 
+      
+      
     </div>
   );
 }

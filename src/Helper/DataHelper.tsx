@@ -1,9 +1,47 @@
 import mapboxgl from 'mapbox-gl';
-const myLat: number = 37.7653468958055;
-const myLon: number = -122.40945776860957;
+let marker: any = null;
+
+let myLat: number = 37.7653468958055;
+let myLon: number = -122.40945776860957;
+export function initializeMap(container: string) {
+  const map = new mapboxgl.Map({
+    container: container,
+    style: "mapbox://styles/mapbox/streets-v11",
+    center: [myLon, myLat],
+    zoom: 12,
+    hash: false
+  });
+
+  map.on('click', async (e) => {
+    const { lng, lat } = e.lngLat;
+    myLon = lng;
+    myLat = lat;
+    if (marker) {
+      marker.remove();
+    }
+    map.flyTo({
+      center: [myLon, myLat],
+      zoom: 12,
+      essential: true
+    });
+    addMyLocation(map);
+  });
+
+  return map;
+}
+
+export function addMyLocation(map: mapboxgl.Map) {
+  if (marker) {
+    marker.remove();
+  }
+  marker = new mapboxgl.Marker()
+    .setLngLat([myLon, myLat])
+    .addTo(map);
+}
 
 export async function fetchData(url: string) {
   try {
+
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error('Failed to fetch data');
@@ -13,16 +51,40 @@ export async function fetchData(url: string) {
     throw error;
   }
 }
-export function initializeMap(container: string) {
-  return new mapboxgl.Map({
-    container: container,
-    style: "mapbox://styles/mapbox/streets-v11",
-    center: [myLon, myLat ],
-    zoom: 12,
-    hash: false
 
-  });
+export function createFeatures(truckData: any[], radius: number): any[] {
+  const features = truckData.map((truck) => {
+    const truckLat = parseFloat(truck.latitude);
+    const truckLon = parseFloat(truck.longitude);
+    const dist = calculateDistance(myLat, myLon, truckLat, truckLon);
+    if (dist <= radius) {
+      return {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [truckLon, truckLat],
+        },
+        properties: {
+          applicant: truck.applicant,
+          fooditems: truck.fooditems,
+          facilitytype: truck.facilitytype,
+          address: truck.address,
+          locationdescription: truck.locationdescription,
+          status: truck.status,
+          dayshours: truck.dayshours,
+          expirationdate: truck.expirationdate,
+          approved: truck.approved,
+        },
+      };
+    } else {
+      return null;
+    }
+  }).filter((feature) => feature !== null);
+ 
+ 
+  return features;
 }
+
 export function addDataToMap(map: mapboxgl.Map, features: any[]): void {
 
   map.addSource("food-truck-source", {
@@ -32,7 +94,6 @@ export function addDataToMap(map: mapboxgl.Map, features: any[]): void {
       features: features,
     },
   });
-
   map.loadImage(require("../assets/image/location.png"), (error: any, image: any) => {
     if (error) throw error;
     map.addImage("truck-icon", image);
@@ -48,8 +109,6 @@ export function addDataToMap(map: mapboxgl.Map, features: any[]): void {
       },
     });
   });
-
-
   map.on('click', 'food-truck-points', function (e: any) {
     const coordinates: [number, number] = e.features[0].geometry.coordinates as [number, number];
     const name: string = e.features[0].properties.applicant;
@@ -69,7 +128,7 @@ export function addDataToMap(map: mapboxgl.Map, features: any[]): void {
   });
 
 }
-export function calculateDistance(
+function calculateDistance(
   lat1: number, lon1: number, lat2: number, lon2: number
 ): number {
   const R = 6371;
@@ -85,38 +144,3 @@ export function calculateDistance(
   const distance = R * c;
   return distance;
 }
-
-export function createFeatures(truckData: any[], radius: number): any[] {
-  return truckData
-    .map((truck) => {
-      const truckLat = parseFloat(truck.latitude);
-      const truckLon = parseFloat(truck.longitude);
-      const dist = calculateDistance(myLat, myLon, truckLat, truckLon);
-      if (dist <= radius) {
-        return {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [truckLon, truckLat],
-          },
-          properties: {
-            applicant: truck.applicant,
-            fooditems: truck.fooditems,
-            facilitytype: truck.facilitytype,
-            address: truck.address,
-            locationdescription: truck.locationdescription,
-            status: truck.status,
-            dayshours: truck.dayshours,
-            expirationdate: truck.expirationdate,
-            approved: truck.approved,
-          },
-        };
-
-      } else {
-        return null;
-      }
-    })
-    .filter((feature) => feature !== null);
-
-}
-
