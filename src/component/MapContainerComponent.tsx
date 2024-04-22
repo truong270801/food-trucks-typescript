@@ -21,10 +21,10 @@ function MapContainerComponent({radius}: MapContainerProps) {
 
       fetchData(apiUrl)
         .then((jsonData: any) => { 
-          const filteredFeatures = createFeatures(jsonData, radius); // Đảm bảo rằng bạn đã import createFeatures
+          const filteredFeatures = createFeatures(jsonData, radius); 
           addDataToMap(map, filteredFeatures);
         })
-        .catch((error: Error) => { // Xác định kiểu dữ liệu của error
+        .catch((error: Error) => { 
           console.error("Error fetching data:", error);
         });
 
