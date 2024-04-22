@@ -24,6 +24,7 @@ function MapContainerComponent({ radius }: MapContainerProps) {
           .then((jsonData: any) => {
             const filteredFeatures = createFeatures(jsonData,radius);
 
+<<<<<<< HEAD
             addDataToMap(map, filteredFeatures);
           })
       } else {
@@ -31,6 +32,16 @@ function MapContainerComponent({ radius }: MapContainerProps) {
           alert("Please enter space");
       }, 500);
       
+=======
+      fetchData(apiUrl)
+        .then((jsonData: any) => { 
+          const filteredFeatures = createFeatures(jsonData, radius); 
+          addDataToMap(map, filteredFeatures);
+        })
+        .catch((error: Error) => { 
+          console.error("Error fetching data:", error);
+        });
+>>>>>>> bf7f3732beae0ca84f0355abe4ce14958fe34168
 
       }
       return () => map.remove();
