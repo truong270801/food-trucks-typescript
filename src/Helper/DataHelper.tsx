@@ -1,13 +1,14 @@
 import mapboxgl from 'mapbox-gl';
 const myLat: number = 37.7653468958055;
 const myLon: number = -122.40945776860957;
+
 export async function fetchData(url: string) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error('Failed to fetch data');
     }
-    return response.json();
+    return await response.json();
   } catch (error) {
     throw error;
   }
